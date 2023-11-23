@@ -58,3 +58,8 @@
 
 
 
+.card-style {
+  width: 100%; /* Utilisez la largeur totale du conteneur */
+  height: 400px; /* Hauteur fixe pour le graphique */
+  /* autres styles si nécessaire */
+}

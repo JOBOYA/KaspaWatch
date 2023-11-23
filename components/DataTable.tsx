@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import SearchComponent from './Search';
 import KasPriceCard from "@/components/KaspaPriceCard"
 
+
 interface Tag {
   address: string;
   name: string;
@@ -149,6 +150,7 @@ const DataTable: React.FC = () => {
         )}
       </div>
     </div>
+   
       </>
     
   );
