@@ -8,6 +8,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        // Ajoutez les autres variables de couleur ici si nécessaire
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -15,6 +20,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [ require('rippleui'), ],
 }
 export default config
