@@ -4,6 +4,7 @@ import { Table, TableBody, TableHeader, TableRow, TableHead, TableCell } from "@
 import PaginationComponent from "@/components/Pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import SearchComponent from './Search';
+import KasPriceCard from "@/components/KaspaPriceCard"
 
 interface Tag {
   address: string;
@@ -74,12 +75,15 @@ const DataTable: React.FC = () => {
   const skeletonHeightClass = 'h-6';
 
   return (
-    <div className="flex flex-col items-center justify-center mt-10">
+<>
+< KasPriceCard/>
+<h1 className="text-3xl font-semibold text-center mt-10">Kas Top Address 10k Rich List</h1>
+<div className="flex flex-col items-center justify-center mt-16">
       <div className="w-5/6">
         <div className="flex justify-end mb-4">
           <SearchComponent onSearch={handleSearch} />
         </div>
-        <Table>
+        <Table >
           <TableHeader>
             <TableRow>
               <TableHead>#</TableHead>
@@ -130,6 +134,8 @@ const DataTable: React.FC = () => {
         )}
       </div>
     </div>
+      </>
+    
   );
 };
 

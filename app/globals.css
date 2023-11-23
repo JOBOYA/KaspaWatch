@@ -7,8 +7,9 @@
   * {
     @apply border-border;
   }
-  body {
+ html, body {
     @apply bg-background text-foreground;
+  
    
   }
 }
@@ -16,7 +17,7 @@
 @layer components {
   .bg-background {
     background-color:rgba(0, 0, 0, 0.959);
-
+    
   }
 }
 
@@ -24,7 +25,7 @@
 
 .grid-background {
   
-  position: absolute;
+  
   top: 0;
   left: 0;
   right: 0;
@@ -34,12 +35,12 @@
   background-image: 
     linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
     linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 60px 60px; /* Taille des carreaux ajustée ici */
+  background-size: 80px 80px; /* Taille des carreaux ajustée ici */
   background-repeat: repeat;
 }
 
 .grid-background {
-  position: absolute;
+  
   top: 0;
   left: 0;
   right: 0;
@@ -50,7 +51,10 @@
     radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 20%, rgba(0, 0, 0, 0.959) 100%),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
     linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: cover, 60px 60px, 60px 60px;
+  background-size: cover, 80px 80px, 80px 80px;
   background-repeat: no-repeat, repeat, repeat;
 }
+
+
+
 
