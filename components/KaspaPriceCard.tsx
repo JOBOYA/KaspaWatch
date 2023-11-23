@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Skeleton } from "@/components/ui/skeleton";
+import Image from 'next/image'
 
 interface MarketData {
   rank: number;
@@ -11,25 +13,47 @@ interface MarketData {
 
 const KasPriceCard: React.FC = () => {
   const [marketData, setMarketData] = useState<MarketData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://api-v2-do.kas.fyi/market');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data: MarketData = await response.json();
-        setMarketData(data);
-      } catch (error) {
-        console.error("Could not fetch market data: ", error);
+  // Fonction pour récupérer les données du marché
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('https://api-v2-do.kas.fyi/market');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
+      const data: MarketData = await response.json();
+      setMarketData(data);
+    } catch (error) {
+      console.error("Could not fetch market data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    fetchData();
+  // Détermine la classe de couleur en fonction de la variation de prix
+  const priceClass = marketData && marketData.priceChange24h >= 0 ? 'text-green-500' : 'text-red-500';
+  const priceChangeSign = marketData && marketData.priceChange24h >= 0 ? '+' : '';
+
+ // Formatage de la variation de prix avec couleur conditionnelle
+ const formatPriceChange = (priceChange: number) => {
+  const priceChangeClass = priceChange >= 0 ? 'text-green-500' : 'text-red-500';
+  const priceChangeSign = priceChange >= 0 ? '+' : '';
+  return (
+    <span className={priceChangeClass}>
+      {priceChangeSign}{priceChange.toFixed(2)}%
+    </span>
+  );
+};
+
+  useEffect(() => {
+    fetchData(); // Appeler fetchData immédiatement lors du montage du composant
+    const intervalId = setInterval(fetchData, 60000); // Configurer un intervalle pour actualiser les données toutes les 60 secondes
+    return () => clearInterval(intervalId); // Nettoyer l'intervalle lors du démontage du composant
   }, []);
-
+  
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (cardRef.current) {
       const card = cardRef.current;
@@ -66,8 +90,16 @@ const KasPriceCard: React.FC = () => {
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="mt-10 w-[500px] h-64 flex flex-col items-center justify-between p-5 rounded-lg backdrop-blur-sm bg-opacity-30 bg-black border border-gray-700 cursor-pointer relative overflow-hidden"
+        className="mt-10 w-full max-w-[500px] h-auto flex flex-col items-center justify-between p-5 rounded-lg backdrop-blur-sm bg-opacity-30 bg-black border border-gray-700 relative overflow-hidden space-y-4"
       >
+        <div className="relative w-24 h-24 md:w-28 md:h-28"> {/* Taille ajustable pour responsive */}
+          <Image
+            src="/OIP-removebg-preview.svg"
+            alt="Kaspa Logo"
+            layout="fill" // Utilisation de "fill" pour un responsive adaptatif
+            objectFit="contain" // Garde l'aspect ratio de l'image
+          />
+        </div>
         <div
           className="hover-circle absolute w-32 h-32 rounded-full transition-all duration-500"
           style={{
@@ -75,23 +107,36 @@ const KasPriceCard: React.FC = () => {
             transform: 'translate(-50%, -50%)',
             left: 'var(--x)',
             top: 'var(--y)',
-            opacity: '0', // initially invisible
+            opacity: '0',
           }}
         ></div>
-      <h2 className="text-xl font-bold mb-4">KAS Market Data</h2>
-      {marketData ? (
-        <div>
-          <p>Rank: {marketData.rank}</p>
-          <p>Price: ${marketData.price.toFixed(4)}</p>
-          <p>24h Change: {marketData.priceChange24h.toFixed(2)}%</p>
-          <p>24h Volume: {marketData.volume24h.toLocaleString()} KAS</p>
-          <p>Market Cap: ${marketData.marketCap.toLocaleString()}</p>
-        </div>
-      ) : (
-        <p>Loading market data...</p>
-      )}
+
+      <div >
+        {isLoading ? (
+          <>
+            <Skeleton className="h-6 w-3/4 mb-4" />
+            <Skeleton className="h-6 w-1/2 mb-2" />
+            <Skeleton className="h-6 w-1/2 mb-2" />
+            <Skeleton className="h-6 w-1/2 mb-2" />
+            <Skeleton className="h-6 w-1/2 mb-2" />
+          </>
+        ) : marketData ? (
+          <>
+            <h2 className="text-xl font-bold mb-4">KAS Market Data</h2>
+            <p>Rank: {marketData.rank}</p>
+            <p>
+              Price: <span className={priceClass}>${marketData.price.toFixed(4)}</span>
+            </p>
+            <p>24h Change: {formatPriceChange(marketData.priceChange24h)}</p>
+            <p>24h Volume: {marketData.volume24h.toLocaleString()} KAS</p>
+            <p>Market Cap: ${marketData.marketCap.toLocaleString()}</p>
+          </>
+        ) : (
+          <p>Error loading data...</p>
+        )}
+      </div>
     </div>
-        </div>
+    </div>
     
   );
 };

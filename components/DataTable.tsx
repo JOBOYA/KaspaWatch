@@ -34,26 +34,41 @@ const DataTable: React.FC = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`https://api-v2-do.kas.fyi/analytics/addresses/richList?page=${currentPage}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data: Address[]) => {
-        setAddresses(data);
-        const filteredData = data.filter((address) => address.address.includes(searchTerm));
-        setFilteredAddresses(filteredData);
-      })
-      .catch((error) => {
-        setError('Failed to fetch addresses');
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [currentPage, searchTerm]);
+    let intervalId: any
+  
+    const fetchData = () => {
+      setLoading(true);
+      fetch(`https://api-v2-do.kas.fyi/analytics/addresses/richList?page=${currentPage}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then((data: Address[]) => {
+          setAddresses(data);
+          const filteredData = data.filter((address) => address.address.includes(searchTerm));
+          setFilteredAddresses(filteredData);
+        })
+        .catch((error) => {
+          setError('Failed to fetch addresses');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+  
+    fetchData(); // Appeler fetchData immédiatement lors du montage du composant
+  
+    intervalId = setInterval(fetchData, 60000); // Configurer un intervalle pour actualiser les données toutes les 60 secondes
+  
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId); // Nettoyer l'intervalle lors du démontage du composant
+      }
+    };
+  }, [currentPage, searchTerm]); // Les dépendances pour réinitialiser l'intervalle lorsque ces valeurs changent
+  
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
