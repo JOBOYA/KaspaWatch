@@ -175,10 +175,7 @@ const handleAddressClick = (address:string) => {
         {` $${(parseInt(address.balance) / 1e8 * kaspaPrice).toFixed(2)}`}
       </span>
     </TableCell>
-
-
-
-                <TableCell>{address.percent.toFixed(2)}%</TableCell>
+    <TableCell>{address.percent.toFixed(2)}%</TableCell>
               </TableRow>
             ))}
           </TableBody>
