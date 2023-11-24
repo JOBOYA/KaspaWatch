@@ -84,7 +84,7 @@ const KasPriceCard: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center ml-4 mr-4">
       <div
         ref={cardRef}
         onMouseMove={handleMouseMove}
@@ -128,7 +128,7 @@ const KasPriceCard: React.FC = () => {
               Price: <span className={priceClass}>${marketData.price.toFixed(4)}</span>
             </p>
             <p>24h Change: {formatPriceChange(marketData.priceChange24h)}</p>
-            <p>24h Volume: {marketData.volume24h.toLocaleString()} KAS</p>
+            <p>24h Volume: ${marketData.volume24h.toLocaleString()}</p>
             <p>Market Cap: ${marketData.marketCap.toLocaleString()}</p>
           </>
         ) : (

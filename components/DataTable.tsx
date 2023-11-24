@@ -29,6 +29,31 @@ const DataTable: React.FC = () => {
   const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
   const [copiedAddresses, setCopiedAddresses] = useState<Record<string, boolean>>({});
+  const [kaspaPrice, setKaspaPrice] = useState<number>(0);
+
+  // Fonction pour récupérer le prix du Kaspa
+  const fetchKaspaPrice = async () => {
+    try {
+      const response = await fetch('https://api-v2-do.kas.fyi/market');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setKaspaPrice(data.price); // Assurez-vous que 'data.price' correspond à la structure de votre réponse API
+    } catch (error) {
+      console.error("Could not fetch Kaspa price:", error);
+    }
+  };
+
+  useEffect(() => {
+    
+
+    fetchKaspaPrice(); 
+    const intervalId = setInterval(fetchKaspaPrice, 60000); // Actualiser le prix toutes les 60 secondes
+
+    return () => clearInterval(intervalId); // Nettoyer l'intervalle lors du démontage
+  }, []);
+
 
   const handleSearch = (searchTerm: string) => {
     setSearchTerm(searchTerm);
@@ -144,7 +169,15 @@ const handleAddressClick = (address:string) => {
                   </div>
                 </TableCell>
                 <TableCell>{address.tags.map(tag => tag.name).join(', ')}</TableCell>
-                <TableCell>{(parseInt(address.balance) / 1e8).toFixed(2)} KAS</TableCell>
+                <TableCell>
+      {(parseInt(address.balance) / 1e8).toFixed(6)} KAS
+      <span className="text-gray-600 text-xs">
+        {` $${(parseInt(address.balance) / 1e8 * kaspaPrice).toFixed(2)}`}
+      </span>
+    </TableCell>
+
+
+
                 <TableCell>{address.percent.toFixed(2)}%</TableCell>
               </TableRow>
             ))}

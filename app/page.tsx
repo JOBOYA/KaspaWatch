@@ -16,7 +16,7 @@ export default function Home() {
              
              
           
-          <h1 className="text-3xl font-bold text-center">Trading Volume</h1>
+          <h1 className="text-3xl font-bold text-center mt-12">Trading Volume</h1>
           <div className="flex justify-center items-center my-4 ">
                 
           <Card />
