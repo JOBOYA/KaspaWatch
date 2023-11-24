@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from 'next/image'
+import { FaHeart } from 'react-icons/fa';
 
 interface MarketData {
   rank: number;
@@ -15,6 +16,9 @@ const KasPriceCard: React.FC = () => {
   const [marketData, setMarketData] = useState<MarketData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const [showAddress, setShowAddress] = useState(false); // State to toggle address visibility
+  const yourKaspaAddress = "kaspa:qypymssp9zdfk84r9wwchpj35525xc7eczlpvqry439350qclvu22hca0jean82"; 
 
   // Fonction pour récupérer les données du marché
   const fetchData = async () => {
@@ -84,6 +88,21 @@ const KasPriceCard: React.FC = () => {
   };
 
   return (
+    <>
+    <button
+        className="absolute right-0 top-0 mr-4 mt-4 flex items-center text-white"
+        onClick={() => setShowAddress(!showAddress)} // Toggle address visibility on click
+      >
+        <FaHeart className="text-red-500 mr-2" /> {/* Heart icon */}
+        Donate
+      </button>
+
+      {showAddress && (
+        <div className="absolute right-0 top-0 mt-12 mr-4 p-2  rounded shadow-lg z-10">
+          {yourKaspaAddress} {/* This will show your address */}
+        </div>
+      )}
+
     <div className="flex justify-center ml-4 mr-4">
       <div
         ref={cardRef}
@@ -137,7 +156,7 @@ const KasPriceCard: React.FC = () => {
       </div>
     </div>
     </div>
-    
+    </>
   );
 };
 
