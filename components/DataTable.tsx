@@ -5,7 +5,7 @@ import PaginationComponent from "@/components/Pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import SearchComponent from './Search';
 import KasPriceCard from "@/components/KaspaPriceCard"
-
+import ButtonSecondary from "@/components/Button"
 
 interface Tag {
   address: string;
@@ -90,9 +90,14 @@ const DataTable: React.FC = () => {
 
   const skeletonHeightClass = 'h-6';
 
+  //une fonction pour gérer le clic sur l'adresse
+const handleAddressClick = (address:string) => {
+  window.open(`https://explorer.kaspa.org/addresses/${address}`, '_blank');
+};
+
   return (
 <>
-< KasPriceCard/>
+<KasPriceCard/>
 <h1 className="text-3xl font-semibold text-center mt-10">Kas Top Address 10k Rich List</h1>
 <div className="flex flex-col items-center justify-center mt-16">
       <div className="w-5/6">
@@ -123,7 +128,12 @@ const DataTable: React.FC = () => {
                 <TableCell>{index + 1 + (currentPage - 1) * itemsPerPage}</TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-2">
-                    <span className="truncate max-w-xs">{address.address}</span>
+                  <span 
+      className="address-link truncate max-w-xs cursor-pointer" 
+      onClick={() => handleAddressClick(address.address)}
+    >
+      {address.address}
+    </span>
                     <button onClick={() => copyToClipboard(address.address)}>
                       {copiedAddresses[address.address] ? (
                         <FiCheck className="text-green-500" />

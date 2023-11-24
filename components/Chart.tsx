@@ -11,7 +11,7 @@ interface ExchangeData {
     type: string;
 }
 
-const Card = () => {
+const Chart = () => {
     const [exchangeData, setExchangeData] = useState<ExchangeData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -70,7 +70,7 @@ const Card = () => {
 
     return (
         <>
-            <h2 className="text-center text-2xl mt-10">Trading volume</h2>
+         
             <div className="container">
                 {isLoading ? (
                     <div>Chargement...</div>
@@ -84,4 +84,4 @@ const Card = () => {
     );
 }
 
-export default Card;
+export default Chart;
