@@ -1,87 +1,81 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Bar } from 'react-chartjs-2';
-import 'chart.js/auto';
+// TradingViewWidget.tsx
+import React, { useEffect, useRef } from 'react';
+import Link from 'next/link';
 
-interface ExchangeData {
-    code: string;
-    volume: number;
-    name: string;
-    color: string;
-    type: string;
+// Déclaration d'un type global pour étendre l'objet window (si ce n'est pas déjà fait ailleurs dans votre projet)
+declare global {
+  interface Window {
+    TradingView: any; // Utilisez un type plus spécifique si vous connaissez la structure de l'objet TradingView
+  }
 }
 
-const Chart = () => {
-    const [exchangeData, setExchangeData] = useState<ExchangeData[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+let tvScriptLoadingPromise: Promise<void> | null = null;
 
-    const fetchData = async () => {
-        setIsLoading(true);
-        try {
-            const response = await axios.get('https://http-api.livecoinwatch.com/coins/KAS/breakdown?category=exchange&field=volume&currency=USD');
-            if (response.data && response.data.data) {
-                setExchangeData(response.data.data);
-            }
-        } catch (error) {
-            console.error('Erreur lors de la récupération des données:', error);
-        }
-        setIsLoading(false);
+const TradingViewWidget: React.FC = () => {
+  const onLoadScriptRef = useRef<() => void>();
+
+  useEffect(() => {
+    function loadTradingViewScript() {
+      if (!tvScriptLoadingPromise) {
+        tvScriptLoadingPromise = new Promise<void>((resolve) => {
+          const script = document.createElement('script');
+          script.id = 'tradingview-widget-script';
+          script.src = 'https://s3.tradingview.com/tv.js';
+          script.async = true;
+          script.onload = () => resolve();
+          document.head.appendChild(script);
+        });
+      }
+      return tvScriptLoadingPromise;
+    }
+
+    function createWidget() {
+      if (document.getElementById('tradingview_aa636') && 'TradingView' in window) {
+        new window.TradingView.widget({
+          autosize: true,
+          symbol: "MEXC:KASUSDT",
+          interval: "D",
+          timezone: "Etc/UTC",
+          theme: "dark",
+          style: "1",
+          locale: "en",
+          enable_publishing: false,
+          allow_symbol_change: true,
+          container_id: "tradingview_aa636"
+        });
+      }
+    }
+
+    onLoadScriptRef.current = createWidget;
+
+    loadTradingViewScript().then(() => {
+      onLoadScriptRef.current?.();
+    });
+
+    return () => {
+      onLoadScriptRef.current = undefined;
     };
+  }, []);
 
-    useEffect(() => {
-        fetchData();
-        const interval = setInterval(fetchData, 60000); // Actualiser toutes les 60 secondes
-        return () => clearInterval(interval); // Nettoyer l'intervalle lors du démontage du composant
-    }, []);
 
-    const data = {
-        labels: exchangeData.map(item => item.name),
-        datasets: [
-            {
-                label: 'Volume',
-                data: exchangeData.map(item => item.volume),
-                backgroundColor: exchangeData.map(item => item.color),
-                borderWidth: 1,
-                
-            },
-        ],
-    };
-
-    const options = {
-        responsive: true,
-        plugins: {
-            legend: {
-                display: true,
-            },
-        },
-        scales: {
-            x: {
-                display: true,
-                categoryPercentage: 0.4, // Moins d'espace pour la catégorie
-                barPercentage: 1.0, // Plus d'espace pour les barres
-            },
-            y: {
-                display: true,
-                beginAtZero: true,
-            },
-        },
-        maintainAspectRatio: false,
-    };
-
+  
     return (
-        <>
-         
-            <div className="container">
-                {isLoading ? (
-                    <div>Chargement...</div>
-                ) : (
-                    <div className="card-style">
-                        <Bar data={data} options={options} />
-                    </div>
-                )}
-            </div>
-        </>
+      // Conteneur centré avec une hauteur et une largeur maximales
+      <div className="flex justify-center items-center w-full h-screen">
+        {/* Conteneur du widget avec une largeur et une hauteur spécifiques et centré horizontalement et verticalement */}
+        <div className="relative w-[900px] h-[500px]">
+          {/* Element du widget */}
+          <div id='tradingview_aa636' className="w-full h-full" />
+          {/* Copyright fixé en bas à l'intérieur du conteneur du widget */}
+          <div className="absolute bottom-0 w-full text-center pb-2">
+            <Link href="https://www.tradingview.com/" rel="noopener noreferrer" target="_blank">
+              <span className="text-blue-600">Track all markets on TradingView</span>
+            </Link>
+          </div>
+        </div>
+      </div>
     );
-}
+  };
 
-export default Chart;
+  export default TradingViewWidget;
+  

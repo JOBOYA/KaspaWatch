@@ -5,7 +5,7 @@ import PaginationComponent from "@/components/Pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import SearchComponent from './Search';
 import KasPriceCard from "@/components/KaspaPriceCard"
-import ButtonSecondary from "@/components/Button"
+
 
 interface Tag {
   address: string;
@@ -30,6 +30,7 @@ const DataTable: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [copiedAddresses, setCopiedAddresses] = useState<Record<string, boolean>>({});
   const [kaspaPrice, setKaspaPrice] = useState<number>(0);
+
 
   // Fonction pour récupérer le prix du Kaspa
   const fetchKaspaPrice = async () => {
@@ -124,6 +125,7 @@ const handleAddressClick = (address:string) => {
 <>
 <KasPriceCard/>
 <h1 className="text-3xl font-semibold text-center mt-10">Kas Top Address 10k Rich List</h1>
+
 <div className="flex flex-col items-center justify-center mt-16">
       <div className="w-5/6">
         <div className="flex justify-end mb-4">
@@ -189,6 +191,7 @@ const handleAddressClick = (address:string) => {
           />
         )}
       </div>
+    
     </div>
    
       </>
