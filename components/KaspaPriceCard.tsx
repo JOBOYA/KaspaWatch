@@ -3,6 +3,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Image from 'next/image';
 import { FaHeart } from 'react-icons/fa';
 
+
+
 interface MarketData {
   rank: number;
   price: number;
@@ -17,6 +19,9 @@ const KasPriceCard: React.FC = () => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [showBlur, setShowBlur] = useState(false); // État pour le flou
   const blurRef = useRef<HTMLDivElement | null>(null);
+
+
+
 
   const [showAddress, setShowAddress] = useState(false);
   const yourKaspaAddress = "kaspa:qypymssp9zdfk84r9wwchpj35525xc7eczlpvqry439350qclvu22hca0jean82";
@@ -101,6 +106,8 @@ const KasPriceCard: React.FC = () => {
     }
   };
 
+
+
   return (
     <>
       {showBlur && (
@@ -122,7 +129,7 @@ const KasPriceCard: React.FC = () => {
       )}
 
 
-      <div className="flex justify-center ml-4 mr-4">
+<div className="flex justify-center ml-4 mr-4 flex-col md:flex-row">
         <div
           ref={cardRef}
           onMouseMove={handleMouseMove}
@@ -170,6 +177,10 @@ const KasPriceCard: React.FC = () => {
             <p>Error loading data...</p>
           )}
         </div>
+        
+        <div className='mt-4 mx-4 md:mt-10 md:ml-4 md:mx-0'>
+        <iframe src="https://widgets.hashrate.no/coinsCalculator/KAS" width="300" height="190"></iframe>
+      </div>
         </div>
       
     </>
