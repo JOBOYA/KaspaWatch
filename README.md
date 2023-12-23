@@ -2,6 +2,9 @@
 
 KaspaWatch is a dashboard displaying the top richest addresses for the KAS cryptocurrency. It allows users to monitor real-time market data and analyze major KAS holders.
 
+![KaspaWatch Dashboard](public/image.png)
+
+
 ## Technologies Used
 
 This project is built with the following technologies:
