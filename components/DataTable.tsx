@@ -124,7 +124,7 @@ const handleAddressClick = (address:string) => {
   return (
 <>
 <KasPriceCard/>
-<h1 className="text-3xl font-semibold text-center mt-10">Kas Top Address 10k Rich List</h1>
+<h1 className="text-6xl font-semibold text-center mt-10">Kas Top Address 10k Rich List</h1>
 
 <div className="flex flex-col items-center justify-center mt-16">
       <div className="w-5/6">
@@ -173,7 +173,7 @@ const handleAddressClick = (address:string) => {
                 <TableCell>{address.tags.map(tag => tag.name).join(', ')}</TableCell>
                 <TableCell>
       {(parseInt(address.balance) / 1e8).toFixed(6)} KAS
-      <span className="text-gray-600 text-xs">
+      <span className="text-slate-400 text-xs bg-slate-600 rounded-md py-1 px-1 ml-2">
         {` $${(parseInt(address.balance) / 1e8 * kaspaPrice).toFixed(2)}`}
       </span>
     </TableCell>
