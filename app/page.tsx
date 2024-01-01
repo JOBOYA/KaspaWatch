@@ -13,17 +13,15 @@ export default function Home() {
   return (
     <>
      <Head>
-          <script
-            id="seona-js-plugin"
-            defer
-            src="https://assets.usestyle.ai/seonajsplugin"
-            type="text/javascript"
-          ></script>
-        </Head>
-      <Head>
         <title>Kaspa Watch - Real-Time Kaspa Blockchain Monitoring</title>
         <meta name="description" content="Explore the latest statistics and trends on the Kaspa blockchain. Track Kaspa prices, volumes, transactions, and more in real-time." />
         <meta name="keywords" content="Kaspa, Kaspa blockchain, Kaspa price, cryptocurrencies, crypto tracking, Kaspa wallets, Kaspa rich list" />
+        <script
+          id="seona-js-plugin"
+          defer
+          src="https://assets.usestyle.ai/seonajsplugin"
+          type="text/javascript"
+        ></script>
       </Head>
 
       <div className="grid-background">
